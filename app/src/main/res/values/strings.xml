@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NetworkChange</string>
+    <string name="action_settings">Settings</string>
+    <string name="send_order_bc">发送有序广播</string>
+</resources>
