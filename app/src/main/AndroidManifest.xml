@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fleming.chen.networkchange">
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +39,12 @@
                 <action android:name="com.fleming.chen.networkchange"/>
             </intent-filter>
         </receiver>
+
+        <service android:name=".NetworkStatusService">
+            <intent-filter android:priority="1000">
+                <action android:name="com.fleming.chen.networkchange.NetworkStatusService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

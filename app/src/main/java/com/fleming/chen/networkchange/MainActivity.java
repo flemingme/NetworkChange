@@ -1,7 +1,8 @@
 package com.fleming.chen.networkchange;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,30 +12,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btSend;
-    private NetworkChangeBroadcast networkChangeBroadcast;
+    private ToggleButton btWifiToggle;
     private MyBroadcastReceiver myBroadcastReceiver;
-    private static final String NETWORK_CHANGE_FILTER = "android.net.conn.CONNECTIVITY_CHANGE";
     public static final String MY_FILTER = "com.fleming.chen.networkchange";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        init();
 
         //发送有序广播
         myBroadcastReceiver = new MyBroadcastReceiver();
@@ -48,16 +39,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //监听网络状况、种类
-        networkChangeBroadcast = new NetworkChangeBroadcast();
-        registerReceiver(networkChangeBroadcast, new IntentFilter(NETWORK_CHANGE_FILTER));
+        //启动实时监测网络变化的服务
+        Intent intent = new Intent(this, NetworkStatusService.class);
+        startService(intent);
+
+        //打开或者关闭wifi
+        btWifiToggle = (ToggleButton) findViewById(R.id.toggleButton);
+        btWifiToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleWifi(MainActivity.this, isChecked);
+            }
+        });
+    }
+
+    private void init() {
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+    //设置WiFi开关
+    private void toggleWifi(Context context, boolean enabled) {
+        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        manager.setWifiEnabled(enabled);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myBroadcastReceiver);
-        unregisterReceiver(networkChangeBroadcast);
     }
 
     @Override

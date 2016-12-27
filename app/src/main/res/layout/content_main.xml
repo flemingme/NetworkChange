@@ -20,4 +20,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:text="@string/send_order_bc" />
+
+    <ToggleButton
+        android:text="打开/关闭wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bt_send"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp"
+        android:id="@+id/toggleButton" />
+
 </RelativeLayout>
