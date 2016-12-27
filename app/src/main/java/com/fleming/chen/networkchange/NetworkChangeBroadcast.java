@@ -20,6 +20,7 @@ public class NetworkChangeBroadcast extends BroadcastReceiver {
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
+//            Log.d("tag", activeNetwork.toString());
             if (activeNetwork != null && activeNetwork.isAvailable()) {
                 String typeName = activeNetwork.getTypeName();
                 Toast.makeText(context, "network is available, name is " + typeName, Toast.LENGTH_SHORT).show();
